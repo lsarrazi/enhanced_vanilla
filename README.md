@@ -73,8 +73,50 @@ class App extends Component
 
 ## Container Components
 
+```tsx
+export class MyContainer extends ContainerComponentElement<MyItem> {
 
 
+  protected element = (<aside class="p-accordion"></aside>);
+
+  constructor(props: Props<MyContainer, MyItem>) {
+    
+    super();
+    
+    this.initContainerComponentElement(this.element, props.children as MyItem[]);
+    // init the container element (here this.element) with the childrens given in the props
+  }
+}
+
+// usage:
+
+let cont = <MyContainer/>;
+let a = <Item/>;
+let b = <Item/>;
+let c = <Item/>;
+
+cont.prepend(a);
+cont.append(b);
+cont.append(c);
+
+cont.swap(a, c);
+
+cont.insert(0, <Item/>);
+
+let last = cont.last(); 
+let first = cont.first();
+
+cont.remove(last);
+
+let second_item = cont.at(1);
+
+let whichIndexIsA = cont.indexOf(a); // no worry this guy is O(1)
+
+for (const item of cont.items())
+  console.log('iteration', item.name);
+ 
+```
+And much more, see [ContainerComponent.tsx](./src/ContainerComponent.tsx)  for complete list
 ## Types
 
 Might be useful for the typing of the components:
