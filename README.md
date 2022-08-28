@@ -46,7 +46,7 @@ export class Button extends Component {
   onClick(pursue: PursueElement<'click'>)
   {
     // before event happen
-    const event: MouseEvent = pursue(); // not calling pursue cancel the event
+    const event: MouseEvent = pursue(); // not calling pursue cancel the dom event
     // after the event
     return 'Hello Parent Component' // the value returned to the parent pursue() call
   }
@@ -129,3 +129,6 @@ Might be useful for the typing of the components:
 
 `Pursue<ComponentType, 'onClick'>` a pursue function with the type of the `onClick` event of the `ComponentType`
 
+`ContainerComponent<ItemType>` an abstract class for container components who need dynamic operations on its items, it is defined with abstract functions `indexOf()`, `at()`, `size()`, `remove()`, `insert()`
+
+`ContainerComponentElement<ItemType>` an implementation of `ContainerComponent` on a html element given to its initializer `this.initContainerComponentElement`
