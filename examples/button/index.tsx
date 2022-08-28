@@ -18,21 +18,21 @@ class Button extends Component {
   }
 
   onClick(pursue: PursueElement<"click">, god: boolean) {
-    console.log("before im clicked");
+    console.log("before onClick");
 
     const event = pursue();
 
-    console.log("im clicked !", event, Date.now());
+    console.log("after onClick", event, Date.now());
 
     return false;
   }
 
   onClick2(pursue: PursueElement<"click">, god: boolean) {
-    console.log("2before im clicked");
+    console.log("before onClick2");
 
     const event = pursue();
 
-    console.log("2im clicked !", event, Date.now());
+    console.log("after onClick2", event, Date.now());
 
     return false;
   }
@@ -59,23 +59,23 @@ class App extends Component {
   }
 
   onButtonClick(pursue: Pursue<Button, "onClick">) {
-    console.log("button clicked throught app");
+    console.log("before onButtonClick");
     
     pursue(true);
 
-    console.log("after shit");
+    console.log("after onButtonClick");
   }
 
   onButtonClick2(pursue: Pursue<Button, "onClick">) {
-    console.log("APP2 start");
+    console.log("before onButtonClick2");
     pursue(true);
 
-    console.log("APP2 stop");
+    console.log("after onButtonClick2");
   }
 }
 
 
 
-const app = (window["app"] = <App message="La kéké"></App>);
+const app = (window["app"] = <App message="La kékétte*"></App>);
 
 document.body.append(window["app"].element);

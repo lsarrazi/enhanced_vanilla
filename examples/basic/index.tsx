@@ -1,4 +1,4 @@
-import {Component, JSXFactory} from "../../src/index";
+import {Component, JSXFactory, Props} from "../../src/index";
 
 class G extends Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class App extends Component {
 
   private message_text = new Text();
 
-  constructor(props: { message?: string }) {
+  constructor(props: Props<App>) {
     super();
 
     this.assignProps(props);
