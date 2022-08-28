@@ -1,0 +1,13 @@
+{
+    
+    "compilerOptions": {
+        "jsx": "react",
+        "jsxFactory": "JSXFactory.createComponent",
+        "jsxFragmentFactory": "JSXFactory.createFragment",
+        "outDir": "./dist",
+        "module":"ES6",
+        "target": "ES5",
+        "moduleResolution": "Node",
+        "inlineSourceMap": true
+    }
+}
