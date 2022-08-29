@@ -5,6 +5,9 @@ import {
   Breadcrumbs,
   BreadcrumbsItem,
 } from "./components/Breadcrumbs/Breadcrumbs";
+import { Checkbox } from "./components/Checkbox/Checkbox";
+import { Radio } from "./components/Radio/Radio";
+import { Select, SelectOption } from "./components/Select/Select";
 
 class App extends Component {
   accordion: Accordion = (
@@ -30,11 +33,29 @@ class App extends Component {
     </Breadcrumbs>
   );
 
+  checkbox = (
+    <Checkbox indeterminate={true}>Hola, do you want to check me ?</Checkbox>
+  );
+
+  radio = (<Radio name="thename">Radio 1</Radio>);
+
+  radio2 = (<Radio name="thename">Radio 2</Radio>);
+
+  select: Select<string> = <Select>
+    <SelectOption value="1">Paris</SelectOption>
+    <SelectOption value="2">Manhatan</SelectOption>
+    <SelectOption value="3">Dubaï</SelectOption>
+  </Select>;
+
   element = (
     <>
       {this.accordion}
       {this.badge}
       {this.breadcrumbs}
+      {this.checkbox}
+      {this.radio}
+      {this.radio2}
+      {this.select}
     </>
   );
 
@@ -83,6 +104,8 @@ class App extends Component {
       this.accordion.append(group);
       console.log("the index", this.accordion.indexOf(group));
     }
+
+    console.log(this.select)
 
     this.override(this.breadcrumbs, "onItemClick", "onBreadcumbsItemClick");
   }
