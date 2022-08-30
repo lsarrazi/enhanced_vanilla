@@ -2,13 +2,7 @@ import { AnyNode, Component, JSXFactory, Props } from "../../../../src";
 
 import { ContainerComponentElement } from "../../../../src/ContainerComponent";
 import { Color } from "../../Common";
-
-/*
-<label class="p-radio">
-  <input type="radio" class="p-radio__input" name="radioPattern" aria-labelledby="radioExample1">
-  <span class="p-radio__label" id="radioExample1">.p-radio</span>
-</label>
- */
+import { FormCompatibleComponent } from "../../FormCompatibleComponent";
 
 export enum RadioStyle {
     DEFAULT = "default",
@@ -16,7 +10,7 @@ export enum RadioStyle {
     HEADING = "heading"
 }
 
-export class Radio extends Component {
+export class Radio extends Component implements FormCompatibleComponent {
   protected element: HTMLInputElement;
 
   input = (<input type="radio" class="p-radio__input" />);

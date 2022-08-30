@@ -6,6 +6,7 @@ import {
   BreadcrumbsItem,
 } from "./components/Breadcrumbs/Breadcrumbs";
 import { Checkbox } from "./components/Checkbox/Checkbox";
+import { Field, FieldType } from "./components/Field/Field";
 import { Radio } from "./components/Radio/Radio";
 import { Select, SelectOption } from "./components/Select/Select";
 
@@ -47,6 +48,8 @@ class App extends Component {
     <SelectOption value="3">Dubaï</SelectOption>
   </Select>;
 
+  field: Field = <Field type={FieldType.TEL}>The input we want</Field>
+
   element = (
     <>
       {this.accordion}
@@ -56,6 +59,7 @@ class App extends Component {
       {this.radio}
       {this.radio2}
       {this.select}
+      {this.field}
     </>
   );
 

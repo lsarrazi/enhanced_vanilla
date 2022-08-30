@@ -2,6 +2,7 @@ import { AnyNode, Component, JSXFactory, Props } from "../../../../src";
 
 import { ContainerComponentElement } from "../../../../src/ContainerComponent";
 import { Color } from "../../Common";
+import { FormCompatibleComponent } from "../../FormCompatibleComponent";
 
 /*
 <label for="exampleSelect">Ubuntu releases</label>
@@ -13,7 +14,7 @@ import { Color } from "../../Common";
   </select>
 */
 
-export class Select<ValueType> extends ContainerComponentElement<SelectOption<ValueType>> {
+export class Select<ValueType> extends ContainerComponentElement<SelectOption<ValueType>> implements FormCompatibleComponent {
   protected element: HTMLInputElement;
 
   protected label_element = <span class="p-select__label"></span>;
