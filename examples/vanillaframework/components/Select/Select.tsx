@@ -3,6 +3,7 @@ import { AnyNode, Component, JSXFactory, Props } from "../../../../src";
 import { ContainerComponentElement } from "../../../../src/ContainerComponent";
 import { Color } from "../../Common";
 import { FormCompatibleComponent } from "../../FormCompatibleComponent";
+import { ValidableComponent, ValidationStyle } from "../../ValidableComponent";
 
 /*
 <label for="exampleSelect">Ubuntu releases</label>
@@ -14,20 +15,27 @@ import { FormCompatibleComponent } from "../../FormCompatibleComponent";
   </select>
 */
 
-export class Select<ValueType> extends ContainerComponentElement<SelectOption<ValueType>> implements FormCompatibleComponent {
+export class Select<ValueType> extends ContainerComponentElement<SelectOption<ValueType>> implements FormCompatibleComponent, ValidableComponent {
   protected element: HTMLInputElement;
 
-  protected label_element = <span class="p-select__label"></span>;
+  protected label_element = <label></label>;
   protected input: HTMLSelectElement = (<select/>);
+
+  protected validation_element: HTMLElement = (
+    <p class="p-form-validation__message"></p>
+  );
 
   constructor(props: Props<Select<ValueType>, SelectOption<ValueType>>) {
     super();
 
     this.element = (
-      <label>
+      <div class="p-form__group p-form-validation">
         {this.label_element}
-        {this.input}
-      </label>
+        <div class="p-form__control u-clearfix">
+          {this.input}
+          {this.validation_element}
+        </div>
+      </div>
     );
 
     this.initContainerComponentElement(this.input, props.children);
@@ -35,6 +43,18 @@ export class Select<ValueType> extends ContainerComponentElement<SelectOption<Va
     this.override(this.element, "change", "onChange");
     
     this.assignProps(props);
+  }
+
+  set validationMessage(value: AnyNode)
+  {
+    this.validation_element.replaceChildren(<>{value}</>);
+  }
+
+  set validationStyle(value: ValidationStyle)
+  {
+    const isDefault = value === ValidationStyle.DEFAULT;
+    this.element.className = isDefault ? 'p-form__group' : 'p-form__group p-form-validation is-' + value.toString();
+    this.input.classList.toggle('p-form-validation__input', !isDefault);
   }
 
   set disabled(value: boolean) {

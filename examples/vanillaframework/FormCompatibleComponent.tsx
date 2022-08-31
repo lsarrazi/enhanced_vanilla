@@ -1,4 +1,4 @@
-import { Component } from "../../src";
+import { AnyNode, Component } from "../../src";
 
 export interface FormCompatibleComponent extends Component
 {

@@ -3,6 +3,7 @@ import { AnyNode, Component, JSXFactory, Props } from "../../../../src";
 import { ContainerComponentElement } from "../../../../src/ContainerComponent";
 import { Color } from "../../Common";
 import { FormCompatibleComponent } from "../../FormCompatibleComponent";
+import { ValidableComponent, ValidationStyle } from "../../ValidableComponent";
 
 /*
 <label class="p-radio">
@@ -27,15 +28,23 @@ export enum FieldType {
   TEXT = "text",
 }
 
-export class Field extends Component implements FormCompatibleComponent {
-  protected element: HTMLInputElement;
-
+export class Field extends Component implements FormCompatibleComponent, ValidableComponent {
   protected input = (<input type="text" />);
 
-  protected validation_element = (
-    <p class="p-form-validation__message" id="8kBkTCElub6LBPIg7Vsb_">
-      <strong>Error:</strong> This field is required.
-    </p>
+  protected validation_element: HTMLElement = (
+    <p class="p-form-validation__message"></p>
+  );
+
+  protected label_element = (<label class="p-form__label"></label>);
+
+  protected element = (
+    <div class="p-form__group p-form-validation">
+      {this.label_element}
+      <div class="p-form__control u-clearfix">
+        {this.input}
+        {this.validation_element}
+      </div>
+    </div>
   );
 
   constructor(props: Props<Field>) {
@@ -50,19 +59,24 @@ export class Field extends Component implements FormCompatibleComponent {
         </div>
     </div>*/
 
-    this.element = (
-      <div class="p-form__group p-form-validation is-error">
-        <label class="p-form__label">{...props.children}</label>
-        <div class="p-form__control u-clearfix">{this.input}</div>
-      </div>
-    );
-
     this.assignProps(props);
 
     this.override(this.element, "change", "onChange");
     this.override(this.element, "keypress", "onKeyPress");
     this.override(this.element, "keyup", "onKeyUp");
     this.override(this.element, "keydown", "onKeyDown");
+  }
+
+  set validationMessage(value: AnyNode)
+  {
+    this.validation_element.replaceChildren(<>{value}</>);
+  }
+
+  set validationStyle(value: ValidationStyle)
+  {
+    const isDefault = value === ValidationStyle.DEFAULT;
+    this.element.className = isDefault ? 'p-form__group' : 'p-form__group p-form-validation is-' + value.toString();
+    this.input.classList.toggle('p-form-validation__input', !isDefault);
   }
 
   set disabled(value: boolean) {
@@ -79,6 +93,10 @@ export class Field extends Component implements FormCompatibleComponent {
 
   get name() {
     return this.input.name;
+  }
+
+  set label(value: AnyNode) {
+    this.label_element.replaceChildren(<>{value}</>)
   }
 
   set value(value: string) {

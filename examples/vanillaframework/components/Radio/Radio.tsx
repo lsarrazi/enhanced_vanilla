@@ -13,7 +13,7 @@ export enum RadioStyle {
 export class Radio extends Component implements FormCompatibleComponent {
   protected element: HTMLInputElement;
 
-  input = (<input type="radio" class="p-radio__input" />);
+  protected input = (<input type="radio" class="p-radio__input" />);
 
   constructor(props: Props<Radio>) {
     super();
