@@ -146,20 +146,22 @@ type WritableKeysOf<T> = {
     : IfEquals<{ [Q in P]: T[P] }, { -readonly [Q in P]: T[P] }, P, never>;
 }[keyof T];
 
-type WritablePart<T> = Pick<T, WritableKeysOf<T>>;
+type WritablePart<T> = Pick<T, WritableKeysOf<T>> ;
 
-export type Props<T, ChildrenType = AnyNode> = Partial<WritablePart<T>> & {
-  children?: ChildrenType[];
-};
+export type Props<T, U=string> = Partial<WritablePart<T>>;
 
 export abstract class Component {
   static events = new Map();
   protected element: HTMLElement;
-  protected children: AnyNode[];
   protected parent: Component;
 
   protected assignProps(propsToBeAssigned) {
     Object.assign(this, propsToBeAssigned);
+  }
+
+  protected assignNodes(element: HTMLElement, nodes: AnyNode[])
+  {
+    element.replaceChildren(JSXFactory.createFragment({children: nodes}));
   }
 
   /*override<T extends (Node)>(child: T, child_event: EventTypes<T>, new_name: keyof this, handler: EventType = this[new_name] as any)

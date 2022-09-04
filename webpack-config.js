@@ -2,6 +2,8 @@ const path = require("path");
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
 const fs = require('fs')
 const examples = fs.readdirSync('./examples').filter(file => file !== '.' || file !== '..')
 
@@ -29,10 +31,26 @@ module.exports = {
         exclude: /node_module/,
         use: "ts-loader",
       },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          // Creates `style` nodes from JS strings
+          MiniCssExtractPlugin.loader,
+          // Translates CSS into CommonJS
+          "css-loader",
+          // Compiles Sass to CSS
+          {
+            loader: "sass-loader",
+            options: {
+              sassOptions: { includePaths: ['./node_modules'] }
+            }
+          },
+        ],
+      },
     ],
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js"],
+    extensions: [".ts", ".tsx", ".js", ".sass", ".scss"],
   },
   mode: "development",
   plugins: [
@@ -42,6 +60,6 @@ module.exports = {
       filename: `./examples/${example}/index.html`,
       inject: false,
     })),
-  
+    new MiniCssExtractPlugin()
   ],
 };

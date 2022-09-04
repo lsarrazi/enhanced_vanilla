@@ -108,7 +108,7 @@ export abstract class ContainerComponent<Item> extends Component {
   }
 }
 
-export abstract class ContainerComponentElement<
+export abstract class BasicContainerComponent<
   Item extends Component
 > extends ContainerComponent<Item> {
   protected attached_containers = new WeakMap<Element, Item>();
