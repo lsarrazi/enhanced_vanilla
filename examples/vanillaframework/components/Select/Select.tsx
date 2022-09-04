@@ -1,9 +1,13 @@
 import { AnyNode, Component, JSXFactory, Props } from "../../../../src";
 
-import { ContainerComponentElement } from "../../../../src/ContainerComponent";
+import { BasicContainerComponent } from "../../../../src/ContainerComponent";
 import { Color } from "../../Common";
 import { FormCompatibleComponent } from "../../FormCompatibleComponent";
-import { ValidableComponent, ValidationStyle } from "../../ValidableComponent";
+import {
+  ValidableComponent,
+  BasicValidableComponent,
+  ValidationStyle,
+} from "../../ValidableComponent";
 
 /*
 <label for="exampleSelect">Ubuntu releases</label>
@@ -15,11 +19,16 @@ import { ValidableComponent, ValidationStyle } from "../../ValidableComponent";
   </select>
 */
 
-export class Select<ValueType> extends ContainerComponentElement<SelectOption<ValueType>> implements FormCompatibleComponent, ValidableComponent {
+export class Select<ValueType>
+  extends BasicContainerComponent<SelectOption<ValueType>>
+  implements FormCompatibleComponent, ValidableComponent
+{
   protected element: HTMLInputElement;
 
-  protected label_element = <label></label>;
-  protected input: HTMLSelectElement = (<select/>);
+  protected label_element = (<label></label>);
+  protected input: HTMLSelectElement = (<select />);
+
+  protected validator: BasicValidableComponent;
 
   protected validation_element: HTMLElement = (
     <p class="p-form-validation__message"></p>
@@ -38,23 +47,27 @@ export class Select<ValueType> extends ContainerComponentElement<SelectOption<Va
       </div>
     );
 
-    this.initContainerComponentElement(this.input, props.children);
+    this.validator = new BasicValidableComponent(
+      this.element,
+      this.validation_element,
+      this.input
+    );
 
     this.override(this.element, "change", "onChange");
-    
+
     this.assignProps(props);
   }
 
-  set validationMessage(value: AnyNode)
-  {
-    this.validation_element.replaceChildren(<>{value}</>);
+  set children(nodes: SelectOption<ValueType>[]) {
+    this.initContainerComponentElement(this.input, nodes);
   }
 
-  set validationStyle(value: ValidationStyle)
-  {
-    const isDefault = value === ValidationStyle.DEFAULT;
-    this.element.className = isDefault ? 'p-form__group' : 'p-form__group p-form-validation is-' + value.toString();
-    this.input.classList.toggle('p-form-validation__input', !isDefault);
+  set validationMessage(value: AnyNode) {
+    this.validator.validationMessage = value;
+  }
+
+  set validationStyle(value: ValidationStyle) {
+    this.validator.validationStyle = value;
   }
 
   set disabled(value: boolean) {
@@ -81,61 +94,50 @@ export class Select<ValueType> extends ContainerComponentElement<SelectOption<Va
     return this.input.name;
   }
 
-  set label(node: AnyNode)
-  {
-    this.label_element.innerHTML = '';
-    this.label_element.append(<>{node}</>)
+  set label(node: AnyNode) {
+    this.label_element.innerHTML = "";
+    this.label_element.append(<>{node}</>);
   }
 
-
-
-  set selectedOptions(options: IterableIterator<SelectOption<ValueType>>)
-  {
-    for (const option of options)
-    {
+  set selectedOptions(options: IterableIterator<SelectOption<ValueType>>) {
+    for (const option of options) {
       option.selected = true;
     }
   }
 
-  get selectedOptions()
-  {
+  get selectedOptions() {
     const self = this;
-    return function*()
-    {
+    return (function* () {
       for (const opt of self.input.selectedOptions)
         yield self.retrieveElementItem(opt);
-    }();
+    })();
   }
 
   onChange(pursue) {
     const e = pursue();
   }
-
 }
 
-
-export class SelectOption<ValueType> extends Component
-{
+export class SelectOption<ValueType> extends Component {
   public value: ValueType;
 
-  protected element: HTMLOptionElement;
+  protected element: HTMLOptionElement = <option></option>;
 
   constructor(props: Props<SelectOption<ValueType>>) {
     super();
 
-    this.element = (
-      <option>{...props.children}</option>
-    );
-
     this.assignProps(props);
   }
 
-  set selected(value: boolean)
-  {
+  set children(nodes: AnyNode[]) {
+    this.assignNodes(this.element, nodes)
+  }
+
+  set selected(value: boolean) {
     this.element.selected = value;
   }
 
-  get selected () {
+  get selected() {
     return this.element.selected;
   }
 }

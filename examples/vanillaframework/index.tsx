@@ -5,10 +5,14 @@ import {
   Breadcrumbs,
   BreadcrumbsItem,
 } from "./components/Breadcrumbs/Breadcrumbs";
+import { Button, ButtonStyle } from "./components/Button/Button";
 import { Checkbox } from "./components/Checkbox/Checkbox";
 import { Field, FieldType } from "./components/Field/Field";
+import { AdditionnalIcons, Icon, StandardIcons } from "./components/Icon/Icon";
 import { Radio } from "./components/Radio/Radio";
 import { Select, SelectOption } from "./components/Select/Select";
+
+import './style.scss';
 
 class App extends Component {
   accordion: Accordion = (
@@ -50,6 +54,11 @@ class App extends Component {
 
   field: Field = <Field type={FieldType.TEL}>The input we want</Field>
 
+  button: Button = 
+  <Button style={ButtonStyle.BRAND} icon={<Icon name={AdditionnalIcons.ADD_CANVAS}/>}>
+    Hola
+  </Button>;
+
   element = (
     <>
       {this.accordion}
@@ -60,6 +69,7 @@ class App extends Component {
       {this.radio2}
       {this.select}
       {this.field}
+      {this.button}
     </>
   );
 

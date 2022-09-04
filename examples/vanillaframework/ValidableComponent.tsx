@@ -8,21 +8,20 @@ export enum ValidationStyle
     CAUTION = 'caution'
 }
 
-export interface ValidableComponent extends Component
+export interface ValidableComponent
 {
     set validationMessage(value: AnyNode);
     set validationStyle(value: ValidationStyle);
 }
 
-export class ValidableComponentElement extends Component implements ValidableComponent
+export class BasicValidableComponent implements ValidableComponent
 {
-    constructor(private form_group_element, private validation_element, public input_element)
+    constructor(private form_group_element: HTMLElement, private validation_element: HTMLElement, public input_element: HTMLElement)
     {
-        super();
     }
 
     set validationMessage(value: AnyNode)
-    {
+    { 
         this.validation_element.replaceChildren(<>{value}</>); 
     }
 

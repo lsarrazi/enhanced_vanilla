@@ -1,32 +1,37 @@
 import { AnyNode, Component, JSXFactory, Props } from "../../../../src";
 
-import { ContainerComponentElement } from "../../../../src/ContainerComponent";
+import { BasicContainerComponent } from "../../../../src/ContainerComponent";
 import { Color } from "../../Common";
 
 export enum CheckboxStyle {
-    DEFAULT = "default",
-    INLINE = "inline",
-    HEADING = "heading"
+  DEFAULT = "default",
+  INLINE = "inline",
+  HEADING = "heading",
 }
 
 export class Checkbox extends Component {
-  protected element: HTMLInputElement;
+  
+  protected input = (<input type="checkbox" class="p-checkbox__input" />);
 
-  input = (<input type="checkbox" class="p-checkbox__input" />);
+  protected label_element = (<span class="p-checkbox__label"></span>);
+
+  protected element: HTMLInputElement = (
+    <label class="p-checkbox">
+      {this.input}
+      {this.label_element}
+    </label>
+  );
 
   constructor(props: Props<Checkbox>) {
     super();
 
-    this.element = (
-      <label class="p-checkbox">
-        {this.input}
-        <span class="p-checkbox__label">{...props.children}</span>
-      </label>
-    );
+    this.override(this.element, "change", "onChange");
 
     this.assignProps(props);
+  }
 
-    this.override(this.element, "change", "onChange");
+  set children(nodes: AnyNode[]) {
+    this.label_element.replaceChildren(<>{...nodes}</>);
   }
 
   set disabled(value: boolean) {
@@ -56,9 +61,9 @@ export class Checkbox extends Component {
     return this.element.indeterminate;
   }
 
-  set style(value: CheckboxStyle)
-  {
-    this.element.className = value === CheckboxStyle.DEFAULT ? 'p-checkbox' : 'p-checkbox--'+value;
+  set style(value: CheckboxStyle) {
+    this.element.className =
+      value === CheckboxStyle.DEFAULT ? "p-checkbox" : "p-checkbox--" + value;
   }
 
   onChange(pursue) {

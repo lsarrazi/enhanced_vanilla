@@ -1,6 +1,6 @@
 import { AnyNode, Component, JSXFactory, Props } from "../../../../src";
 
-import { ContainerComponentElement } from "../../../../src/ContainerComponent";
+import { BasicContainerComponent } from "../../../../src/ContainerComponent";
 import { Color } from "../../Common";
 
 export enum BadgeColor {
@@ -16,8 +16,10 @@ export class Badge extends Component {
     super();
 
     this.assignProps(props);
-    
-    this.element.append(<>{...props.children}</>)
+  }
+
+  set children(nodes: AnyNode[]) {
+    this.assignNodes(this.element, nodes)
   }
 
   set label(value: string)

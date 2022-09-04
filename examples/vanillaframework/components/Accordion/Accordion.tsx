@@ -1,7 +1,7 @@
 import { AnyNode, Component, JSXFactory, Props } from "../../../../src";
-import { ContainerComponentElement } from "../../../../src/ContainerComponent";
+import { BasicContainerComponent } from "../../../../src/ContainerComponent";
 
-export class Accordion extends ContainerComponentElement<AccordionGroup> {
+export class Accordion extends BasicContainerComponent<AccordionGroup> {
 
   protected list = (<ul class="p-accordion__list"></ul>);
   
@@ -9,11 +9,15 @@ export class Accordion extends ContainerComponentElement<AccordionGroup> {
 
   protected element = (<aside class="p-accordion">{this.list}</aside>);
 
-  constructor(props: Props<Accordion, AccordionGroup>) {
+  constructor(props: Props<Accordion>) {
     
     super();
     
-    this.initContainerComponentElement(this.list, props.children as AccordionGroup[]);
+    
+  }
+
+  set children(nodes: AccordionGroup[]) {
+    this.initContainerComponentElement(this.list, nodes);
   }
 }
 
@@ -51,9 +55,12 @@ export class AccordionGroup extends Component {
 
   constructor(props: Props<AccordionGroup>) {
     super();
-    this.assignProps(props)
-    this.panel.append(<>{...props.children}</>);
     this.override(this.button, "click", "onButtonClick");
+    this.assignProps(props)
+  }
+
+  set children(nodes: AnyNode[]) {
+    this.assignNodes(this.panel, nodes)
   }
 
   onButtonClick(pursue) {

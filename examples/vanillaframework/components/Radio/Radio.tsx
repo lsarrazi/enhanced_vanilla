@@ -1,6 +1,6 @@
 import { AnyNode, Component, JSXFactory, Props } from "../../../../src";
 
-import { ContainerComponentElement } from "../../../../src/ContainerComponent";
+import { BasicContainerComponent } from "../../../../src/ContainerComponent";
 import { Color } from "../../Common";
 import { FormCompatibleComponent } from "../../FormCompatibleComponent";
 
@@ -15,19 +15,25 @@ export class Radio extends Component implements FormCompatibleComponent {
 
   protected input = (<input type="radio" class="p-radio__input" />);
 
+  protected label_element = <span class="p-radio__label"></span>;
+
   constructor(props: Props<Radio>) {
     super();
 
     this.element = (
       <label class="p-radio">
         {this.input}
-        <span class="p-radio__label">{...props.children}</span>
+        {this.label_element}
       </label>
     );
 
     this.assignProps(props);
 
     this.override(this.element, "change", "onChange");
+  }
+
+  set children(nodes: AnyNode[]) {
+    this.assignNodes(this.label_element, nodes)
   }
 
   set disabled(value: boolean) {

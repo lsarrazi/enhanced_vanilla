@@ -1,9 +1,9 @@
 import { AnyNode, Component, JSXFactory, Props } from "../../../../src";
 
-import { ContainerComponentElement } from "../../../../src/ContainerComponent";
+import { BasicContainerComponent } from "../../../../src/ContainerComponent";
 import { Color } from "../../Common";
 import { FormCompatibleComponent } from "../../FormCompatibleComponent";
-import { ValidableComponent, ValidationStyle } from "../../ValidableComponent";
+import { BasicValidableComponent, ValidableComponent, ValidationStyle } from "../../ValidableComponent";
 
 /*
 <label class="p-radio">
@@ -37,6 +37,8 @@ export class Field extends Component implements FormCompatibleComponent, Validab
 
   protected label_element = (<label class="p-form__label"></label>);
 
+  protected validator: BasicValidableComponent;
+
   protected element = (
     <div class="p-form__group p-form-validation">
       {this.label_element}
@@ -59,24 +61,26 @@ export class Field extends Component implements FormCompatibleComponent, Validab
         </div>
     </div>*/
 
-    this.assignProps(props);
+    this.validator = new BasicValidableComponent(
+      this.element,
+      this.validation_element,
+      this.input
+    );
 
     this.override(this.element, "change", "onChange");
     this.override(this.element, "keypress", "onKeyPress");
     this.override(this.element, "keyup", "onKeyUp");
     this.override(this.element, "keydown", "onKeyDown");
+    
+    this.assignProps(props);
   }
 
-  set validationMessage(value: AnyNode)
-  {
-    this.validation_element.replaceChildren(<>{value}</>);
+  set validationMessage(value: AnyNode) {
+    this.validator.validationMessage = value;
   }
 
-  set validationStyle(value: ValidationStyle)
-  {
-    const isDefault = value === ValidationStyle.DEFAULT;
-    this.element.className = isDefault ? 'p-form__group' : 'p-form__group p-form-validation is-' + value.toString();
-    this.input.classList.toggle('p-form-validation__input', !isDefault);
+  set validationStyle(value: ValidationStyle) {
+    this.validator.validationStyle = value;
   }
 
   set disabled(value: boolean) {
