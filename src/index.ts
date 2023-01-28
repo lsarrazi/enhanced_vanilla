@@ -73,10 +73,10 @@ export abstract class JSXFactory {
   static createComponent(element, properties, ...children: AnyNode[]) {
     if (typeof element === "function") {
       if (element === this.createFragment) {
-		return element({
-			...nonNull(properties, {}),
-			children,
-		  });
+        return element({
+          ...nonNull(properties, {}),
+          children,
+        });
       } else {
         return new element({
           ...nonNull(properties, {}),
@@ -146,9 +146,9 @@ type WritableKeysOf<T> = {
     : IfEquals<{ [Q in P]: T[P] }, { -readonly [Q in P]: T[P] }, P, never>;
 }[keyof T];
 
-type WritablePart<T> = Pick<T, WritableKeysOf<T>> ;
+type WritablePart<T> = Pick<T, WritableKeysOf<T>>;
 
-export type Props<T, U=string> = Partial<WritablePart<T>>;
+export type Props<T, U = string> = Partial<WritablePart<T>>;
 
 export abstract class Component {
   static events = new Map();
@@ -159,9 +159,8 @@ export abstract class Component {
     Object.assign(this, propsToBeAssigned);
   }
 
-  protected assignNodes(element: HTMLElement, nodes: AnyNode[])
-  {
-    element.replaceChildren(JSXFactory.createFragment({children: nodes}));
+  protected assignNodes(element: HTMLElement, nodes: AnyNode[]) {
+    element.replaceChildren(JSXFactory.createFragment({ children: nodes }));
   }
 
   /*override<T extends (Node)>(child: T, child_event: EventTypes<T>, new_name: keyof this, handler: EventType = this[new_name] as any)
@@ -223,7 +222,8 @@ export abstract class Component {
 
   async dispatchDom(event: keyof this, element: Element, dom_event) {
     let listeners = Component.getListeners(event);
-    for (const element_n of dom_event.path) {
+    const path = dom_event.composedPath();
+    for (const element_n of path) {
       if (element_n === element && listeners.has(element_n)) {
         let first_pursued = false;
         let pursue = () => {

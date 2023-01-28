@@ -6,13 +6,21 @@ import {
   BreadcrumbsItem,
 } from "./components/Breadcrumbs/Breadcrumbs";
 import { Button, ButtonStyle } from "./components/Button/Button";
+import { Card, CardHr, CardImage, CardInner } from "./components/Card/Card";
 import { Checkbox } from "./components/Checkbox/Checkbox";
+import {
+  Chip,
+  ChipDismiss,
+  ChipLead,
+  ChipStyle,
+  ChipValue,
+} from "./components/Chip/Chip";
 import { Field, FieldType } from "./components/Field/Field";
 import { AdditionnalIcons, Icon, StandardIcons } from "./components/Icon/Icon";
 import { Radio } from "./components/Radio/Radio";
 import { Select, SelectOption } from "./components/Select/Select";
 
-import './style.scss';
+import "./style.scss";
 
 class App extends Component {
   accordion: Accordion = (
@@ -46,18 +54,65 @@ class App extends Component {
 
   radio2 = (<Radio name="thename">Radio 2</Radio>);
 
-  select: Select<string> = <Select>
-    <SelectOption value="1">Paris</SelectOption>
-    <SelectOption value="2">Manhatan</SelectOption>
-    <SelectOption value="3">Dubaï</SelectOption>
-  </Select>;
+  select: Select<string> = (
+    <Select>
+      <SelectOption value="1">Paris</SelectOption>
+      <SelectOption value="2">Manhatan</SelectOption>
+      <SelectOption value="3">Dubaï</SelectOption>
+    </Select>
+  );
 
-  field: Field = <Field type={FieldType.TEL}>The input we want</Field>
+  object1 = { index: 1 };
+  object2 = { index: 2 };
+  object3 = { index: 3 };
 
-  button: Button = 
-  <Button style={ButtonStyle.BRAND} icon={<Icon name={AdditionnalIcons.ADD_CANVAS}/>}>
-    Hola
-  </Button>;
+  select_object: Select<Object> = (
+    <Select multiple={true}>
+      <SelectOption value={this.object1}>Object 1</SelectOption>
+      <SelectOption value={this.object2}>Object 2</SelectOption>
+      <SelectOption value={this.object3}>Object 3</SelectOption>
+    </Select>
+  );
+
+  field: Field = (<Field type={FieldType.TEL}>The input we want</Field>);
+
+  button: Button = (
+    <Button
+      style={ButtonStyle.BRAND}
+      icon={<Icon name={AdditionnalIcons.ADD_CANVAS} />}
+    >
+      Hola
+    </Button>
+  );
+
+  card: Card = (
+    <Card>
+      <CardImage src="https://assets.ubuntu.com/v1/0f33d832-The-State-of-Robotics.jpg" />
+      <CardInner>
+        <h3>The State of Robotics - August 2021</h3>
+        <p>
+          From robots learning to encourage social participation to detect
+          serious environmental problems, it was a learning month.
+        </p>
+      </CardInner>
+      <CardHr />
+      <CardInner>
+        by <a href="#">Bartek Szopka</a> on 21st August 2021
+      </CardInner>
+      <CardImage src="https://assets.ubuntu.com/v1/0f33d832-The-State-of-Robotics.jpg" />
+      <CardInner>
+        by <a href="#">Bartek Szopka</a> on 21st August 2021
+      </CardInner>
+    </Card>
+  );
+
+  chip = (
+    <Chip style={ChipStyle.INFORMATION}>
+      <ChipLead>lead</ChipLead>
+      <ChipValue>Yolo</ChipValue>
+      <ChipDismiss>Hola</ChipDismiss>
+    </Chip>
+  );
 
   element = (
     <>
@@ -68,8 +123,11 @@ class App extends Component {
       {this.radio}
       {this.radio2}
       {this.select}
+      {this.select_object}
       {this.field}
       {this.button}
+      {this.card}
+      {this.chip}
     </>
   );
 
@@ -119,7 +177,20 @@ class App extends Component {
       console.log("the index", this.accordion.indexOf(group));
     }
 
-    console.log(this.select)
+    this.override(this.select_object, "onChange", null, (pursue) => {
+      const options = [...this.select_object.selectedValues];
+      console.log(
+        "Selected options:",
+        options.includes(this.object1),
+        options.includes(this.object2),
+        options.includes(this.object3)
+      );
+      pursue();
+    });
+
+    this.select_object.selectedValue = this.object3;
+
+    console.log(this.select);
 
     this.override(this.breadcrumbs, "onItemClick", "onBreadcumbsItemClick");
   }

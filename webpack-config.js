@@ -9,7 +9,14 @@ const examples = fs.readdirSync('./examples').filter(file => file !== '.' || fil
 
 const examplesEntry = examples.reduce( (entry, example) => (entry[`./examples/${example}/index`] = path.resolve(__dirname, `./examples/${example}/index.tsx`), entry), {} );
 
+const TerserPlugin = require("terser-webpack-plugin");
+
 module.exports = {
+
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
+  },
 
   entry: {
     ...examplesEntry
@@ -62,4 +69,6 @@ module.exports = {
     })),
     new MiniCssExtractPlugin()
   ],
+
+  
 };

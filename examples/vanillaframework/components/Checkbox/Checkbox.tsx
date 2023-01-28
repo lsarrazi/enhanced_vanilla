@@ -61,6 +61,7 @@ export class Checkbox extends Component {
     return this.element.indeterminate;
   }
 
+  /** Checkbox style */
   set style(value: CheckboxStyle) {
     this.element.className =
       value === CheckboxStyle.DEFAULT ? "p-checkbox" : "p-checkbox--" + value;

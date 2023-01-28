@@ -32,3 +32,4 @@ export class BasicValidableComponent implements ValidableComponent
         this.input_element.classList.toggle('p-form-validation__input', !isDefault);
     }
 }
+

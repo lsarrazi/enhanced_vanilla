@@ -34,6 +34,8 @@ export class Select<ValueType>
     <p class="p-form-validation__message"></p>
   );
 
+  protected mapValueToOptions = new Map<ValueType, SelectOption<ValueType>>();
+
   constructor(props: Props<Select<ValueType>, SelectOption<ValueType>>) {
     super();
 
@@ -60,6 +62,19 @@ export class Select<ValueType>
 
   set children(nodes: SelectOption<ValueType>[]) {
     this.initContainerComponentElement(this.input, nodes);
+
+    this.mapValueToOptions.clear();
+    for (const node of nodes) this.mapValueToOptions.set(node.value, node);
+  }
+
+  remove(item: SelectOption<ValueType>) {
+    super.remove(item);
+    this.mapValueToOptions.delete(item.value);
+  }
+
+  insert(position: number, item: SelectOption<ValueType>) {
+    super.insert(position, item);
+    this.mapValueToOptions.set(item.value, item);
   }
 
   set validationMessage(value: AnyNode) {
@@ -99,18 +114,66 @@ export class Select<ValueType>
     this.label_element.append(<>{node}</>);
   }
 
+  /** to be used when multiple = true */
   set selectedOptions(options: IterableIterator<SelectOption<ValueType>>) {
     for (const option of options) {
       option.selected = true;
     }
   }
 
+  /** to be used when multiple = true */
   get selectedOptions() {
     const self = this;
     return (function* () {
-      for (const opt of self.input.selectedOptions)
-        yield self.retrieveElementItem(opt);
+      for (const optionElement of self.input.selectedOptions)
+        yield self.retrieveElementItem(optionElement);
     })();
+  }
+
+  /** to be used when multiple = false */
+  get selectedOption(): SelectOption<ValueType> | null {
+    for (const opt of this.input.selectedOptions)
+      return this.retrieveElementItem(opt);
+  }
+
+  /** to be used when multiple = false */
+  set selectedOption(option: SelectOption<ValueType>) {
+    option.selected = true;
+  }
+
+  /** to be used when multiple = true */
+  set selectedValues(values: IterableIterator<ValueType>) {
+    const self = this;
+    this.selectedOptions = (function* () {
+      for (const value of values) {
+        const option = yield self.mapValueToOptions.get(value);
+        if (!option) self.throwValueNotFound();
+      }
+    })();
+  }
+
+  /** to be used when multiple = true */
+  get selectedValues() {
+    const self = this;
+    return (function* () {
+      for (const opt of self.selectedOptions) yield opt.value;
+    })();
+  }
+
+  /** to be used when multiple = false */
+  get selectedValue() {
+    return this.selectedOption.value;
+  }
+
+  /** to be used when multiple = false */
+  set selectedValue(value: ValueType) {
+    const option = this.mapValueToOptions.get(value);
+    if (!option) this.throwValueNotFound();
+    this.selectedOption = option;
+  }
+
+  private throwValueNotFound() {
+    throw new ReferenceError("cant find option corresponding to this value");
   }
 
   onChange(pursue) {
@@ -121,7 +184,7 @@ export class Select<ValueType>
 export class SelectOption<ValueType> extends Component {
   public value: ValueType;
 
-  protected element: HTMLOptionElement = <option></option>;
+  protected element: HTMLOptionElement = (<option></option>);
 
   constructor(props: Props<SelectOption<ValueType>>) {
     super();
@@ -130,7 +193,7 @@ export class SelectOption<ValueType> extends Component {
   }
 
   set children(nodes: AnyNode[]) {
-    this.assignNodes(this.element, nodes)
+    this.assignNodes(this.element, nodes);
   }
 
   set selected(value: boolean) {

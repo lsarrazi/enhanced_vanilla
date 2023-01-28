@@ -1,21 +1,19 @@
 @import 'vanilla-framework';
 @include vanilla;
 
-@import 'vanilla-framework/scss/patterns_icons';
-
-@include vf-base;
+//@import 'vanilla-framework/scss/patterns_icons';
 
 
-
-@include vf-p-icons;
+//@include vf-p-icons;
 
 // for spin animation on the spinner icon you need to include animations utility
 @import 'vanilla-framework/scss/utilities_animations';
 @include vf-u-animations;
  
 // include common styles shared by all icons;
-@include vf-p-icons-common;
+//@include vf-p-icons-common;
 // include only the icons that you use in your project;
+/*
 @include vf-p-icon-plus;
 @include vf-p-icon-minus;
 @include vf-p-icon-expand;
@@ -48,7 +46,7 @@
 @include vf-p-icon-youtube;
 @include vf-p-icon-github;
 @include vf-p-icon-rss;
-@include vf-p-icon-email;
+@include vf-p-icon-email;*/
 // additional icons;
 @include vf-p-icon-applications;
 @include vf-p-icon-controllers;
